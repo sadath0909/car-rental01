@@ -1,0 +1,51 @@
+CREATE TABLE `customer_details` (
+  `DLNumber` int NOT NULL,
+  `Name` varchar(45) DEFAULT NULL,
+  `Phone_Number` int DEFAULT NULL,
+  `email_id` varchar(60) DEFAULT NULL,
+  `Street` varchar(45) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `State` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`DLNumber`)
+);
+
+
+CREATE TABLE `car` (
+  `RegistrationNumber` int NOT NULL,
+  `modelname` varchar(45) DEFAULT NULL,
+  `modelyear` date DEFAULT NULL,
+  `mileage` decimal(12,2) DEFAULT NULL,
+  `costperday` decimal(12,2) DEFAULT NULL,
+  `loc_id` int NOT NULL,
+  PRIMARY KEY (`RegistrationNumber`),
+  KEY `fk1_idx` (`loc_id`),
+  CONSTRAINT `fk1` FOREIGN KEY (`loc_id`) REFERENCES `location_details` (`location_id`) ON DELETE CASCADE
+);
+
+
+CREATE TABLE `location_details` (
+  `location_id` int NOT NULL,
+  `location_name` varchar(45) DEFAULT NULL,
+  `street` varchar(45) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `state` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`location_id`)
+);
+
+
+CREATE TABLE `booking_details` (
+  `booking_id` int NOT NULL,
+  `amount` decimal(12,2) DEFAULT NULL,
+  `fromdate` datetime DEFAULT NULL,
+  `returndate` datetime DEFAULT NULL,
+  `pickup_loc` int DEFAULT NULL,
+  `drop_loc` int DEFAULT NULL,
+  `reg_num` int DEFAULT NULL,
+  `DL_num` int DEFAULT NULL,
+  PRIMARY KEY (`booking_id`),
+  KEY `fk2_idx` (`pickup_loc`),
+  KEY `fk3_idx` (`drop_loc`),
+  KEY `fk4_idx` (`DL_num`),
+  CONSTRAINT `fk2` FOREIGN KEY (`pickup_loc`) REFERENCES `location_details` (`location_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk3` FOREIGN KEY (`drop_loc`) REFERENCES `location_details` (`location_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk4` FOREIGN KEY (`DL_num`) REFERENCES `customer_details` (`DLNumber`) ON DELETE CASCADE);
